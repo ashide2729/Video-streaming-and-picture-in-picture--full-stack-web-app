@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Streaming</title>
+    <style>
+        body{
+            background-color: #414;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 95vh;
+        }
+        .container{
+            display: flex;
+            flex-direction: column;
+        }
+        #pipButton{
+            margin-top: 20px;
+            border: none;
+            border-radius: 5px;
+            height: 50px;
+            width: auto;
+            background-color: aqua;
+            cursor: pointer;
+        }
+        #pipButton:hover{
+            background-color: blue;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <video width="700" controls muted="muted" autoplay id="video">
+            <source src="/video" type="video/mp4">
+        </video>
+        <button id="pipButton">Enter Picture-in-Picture mode</button>
+    </div>
+
+    <script>
+    const video = document.getElementById('video');
+    const pipButton = document.getElementById('pipButton');
+
+    if ('pictureInPictureEnabled' in document) {
+    pipButton.classList.remove('hidden')
+    pipButton.disabled = false;
+    
+    pipButton.addEventListener('click', () => {
+        if (document.pictureInPictureElement) {
+        document
+            .exitPictureInPicture()
+            .catch(error => {
+            // Error handling
+            })
+        } else {
+        video
+        .requestPictureInPicture()
+        .catch(error => {
+            // Error handling
+        });
+        }
+    });
+    }
+
+    video.addEventListener('enterpictureinpicture', () => {
+        pipButton.textContent = 'Exit Picture-in-Picture mode';
+    });
+
+    video.addEventListener('leavepictureinpicture', () => {
+        pipButton.textContent = 'Enter Picture-in-Picture mode';
+    });
+    </script>
+</body>
+</html>
